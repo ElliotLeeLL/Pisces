@@ -3,7 +3,7 @@ from typing_extensuins import Annotated
 from zenml import get_step_context, step
 
 from llm_engineering.application import utils
-from llm_engineering,domain.documents import UserDocument
+from llm_engineering.domain.documents import UserDocument
 
 @step
 def get_or_create_user(user_full_name: str) -> Annotated[UserDocument, "user"]:

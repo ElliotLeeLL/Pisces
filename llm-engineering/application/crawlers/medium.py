@@ -3,7 +3,7 @@ from loguru import logger
 
 from llm_engineering.domain.documents import ArticleDocument
 
-from .base import BaseSeleniumCrawler
+from .base import BaseSeleniumCrawler, BaseCrawler
 
 class MediumCrawler(BaseCrawler):
     model = ArticleDocument

@@ -11,11 +11,11 @@ from .base import BaseCrawler
 class GithubCrawler(BaseCrawler):
     model = RepositoryDocument
 
-    def __init__(self, ignore=(".git", ".toml", ".lock", ".png")) -> NOne:
+    def __init__(self, ignore=(".git", ".toml", ".lock", ".png")) -> None:
         super().__init__()
         self. _ignore = ignore
     
-    def extract(self, links: str, **kwargs) -> None:
+    def extract(self, link: str, **kwargs) -> None:
         old_model = self.model.find(link=link)
         if old_model is not None:
             logger.info(f"Repository already exists in the database: {link}")
