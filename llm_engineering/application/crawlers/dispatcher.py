@@ -40,7 +40,7 @@ class CrawlerDispatcher:
         parsed_domain = urlparse(domain)
         domain = parsed_domain.netloc
 
-        self.crawlers[r"https://(www\.){}/*"].format(re.escape(domain)) = crawler
+        self.crawlers[r"https://(www\.){}/*".format(re.escape(domain))] = crawler
 
     def get_crawler(self, url: str) -> BaseCrawler:
         for pattern, crawler in self._crawlers.items():
