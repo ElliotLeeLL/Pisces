@@ -14,3 +14,58 @@ class Settings(BaseSettings):
     QDRANT_DATABASE_PORT: int = 6333
     QDRANT_CLOUD_URL: str = "str"
     QDRANT_APIKEY: str | None = None
+
+    @property
+    def OPENAI_MAX_TOKEN_WINDOW(self) -> int:
+        official_max_token_window = {
+            "gpt-3.5-turbo": 16385,
+            "gpt-4-turbo": 128000,
+            "gpt-4o": 128000,
+            "gpt-4o-mini": 128000,
+        }.get(self.OPENAI_MODEL_ID, 128000)
+
+        max_token_window = int(official_max_token_window * 0.90)
+
+        return max_token_window
+
+    @classmethod
+    def load_settings(cls) -> "Settings":
+        """
+        Tries to load the settings from the ZenML secret store. If the secret does not exist, it initializes the settings from the .env file and default values.
+
+        Returns:
+            Settings: The initialized settings object.
+        """
+
+        try:
+            logger.info("Loading settings from the ZenML secret store.")
+
+            settings_secrets = Client().get_secret("settings")
+            settings = Settings(**settings_secrets.secret_values)
+        except (RuntimeError, KeyError):
+            logger.warning(
+                "Failed to load settings from the ZenML secret store. Defaulting to loading the settings from the '.env' file."
+            )
+            settings = Settings()
+
+        return settings
+
+    def export(self) -> None:
+        """
+        Exports the settings to the ZenML secret store.
+        """
+
+        env_vars = settings.model_dump()
+        for key, value in env_vars.items():
+            env_vars[key] = str(value)
+
+        client = Client()
+
+        try:
+            client.create_secret(name="settings", values=env_vars)
+        except EntityExistsError:
+            logger.warning(
+                "Secret 'scope' already exists. Delete it manually by running 'zenml secret delete settings', before trying to recreate it."
+            )
+
+settings = Settings.load_settings()
