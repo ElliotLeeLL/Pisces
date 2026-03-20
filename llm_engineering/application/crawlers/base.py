@@ -4,12 +4,12 @@ from tempfile import mkdtemp
 import chromedriver_autoinstaller
 from selenium import webdriver
 from selenium.webdriver.chrome.options import  Options
-from llm_engineering.domain.documents import NOSQLBaseDocument
+from llm_engineering.domain.base import NoSQLBaseDocument
 
 chromedriver_autoinstaller.install()
 
 class BaseCrawler(ABC):
-    model: type[NOSQLBaseDocument]
+    model: type[NoSQLBaseDocument]
 
     @abstractmethod
     def extract(self, link: str, **kwargs) -> None: ...
