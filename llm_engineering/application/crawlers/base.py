@@ -6,6 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import  Options
 from llm_engineering.domain.base import NoSQLBaseDocument
 
+# Install or load chromedriver
 chromedriver_autoinstaller.install()
 
 class BaseCrawler(ABC):
