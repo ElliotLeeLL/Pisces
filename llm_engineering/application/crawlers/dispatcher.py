@@ -6,7 +6,7 @@ from loguru import logger
 from .base import BaseCrawler
 from .custom_article import CustomArticleCrawler
 from .github import GithubCrawler
-from .linkedin import LinkedinCrawler
+from .linkedin import LinkedInCrawler
 from .medium import MediumCrawler
 
 class CrawlerDispatcher:
@@ -15,7 +15,7 @@ class CrawlerDispatcher:
 
         return dispatcher
     
-    @Classmethod
+    @classmethod
     def build(cls) -> "CrawlerDispatcher":
         dispatcher = cls()
 
