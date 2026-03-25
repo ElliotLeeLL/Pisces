@@ -1,13 +1,21 @@
 from abc import ABC, abstractmethod
 import time
+import os
 from tempfile import mkdtemp
 import chromedriver_autoinstaller
 from selenium import webdriver
 from selenium.webdriver.chrome.options import  Options
 from llm_engineering.domain.base import NoSQLBaseDocument
 
-# Install or load chromedriver
-chromedriver_autoinstaller.install()
+# # Install or load chromedriver
+# chromedriver_path = "/usr/local/bin/chromedriver"
+
+# if os.path.exists(chromedriver_path):
+#     print(f"The file '{chromedriver_path}' exists.")
+# else:
+#     print(f"The file '{chromedriver_path}' does not exist.")
+# # chromedriver_autoinstaller.install(path=chromedriver_path)
+
 
 class BaseCrawler(ABC):
     model: type[NoSQLBaseDocument]
@@ -36,9 +44,25 @@ class BaseSeleniumCrawler(BaseCrawler, ABC):
         self.set_extra_driver_options(options)
 
         self.scroll_limit = scroll_limit
-        self.driver = webdriver.Chrome(
-            options=options,
-        )
+
+        chromedriver_path = "/usr/local/bin/chromedriver"
+        try:
+            # Try to load the local ChromeDriver
+            if not os.path.exists(chromedriver_path):
+                raise FileNotFoundError("Local ChromeDriver not found.")
+            driver = webdriver.Chrome(
+                options=options,
+                executable_path=chromedriver_path,
+            )
+            print("ChromeDriver loaded from the local file.")
+
+        except (FileNotFoundError, Exception) as e:
+            # If there's an error, install ChromeDriver automatically
+            print(f"Error: {e}. Installing ChromeDriver.")
+            chromedriver_autoinstaller.install()
+            self.driver = webdriver.Chrome(
+                options=options,
+            )
     
     def set_extra_driver_options(self, options: Options) -> None:
         pass
