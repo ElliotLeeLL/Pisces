@@ -11,9 +11,7 @@ from .medium import MediumCrawler
 
 class CrawlerDispatcher:
     def __init__(self) -> None:
-        dispatcher = cls()
-
-        return dispatcher
+        self._crawlers = {}
     
     @classmethod
     def build(cls) -> "CrawlerDispatcher":
