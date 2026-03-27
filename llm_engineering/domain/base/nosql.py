@@ -65,7 +65,7 @@ class NoSQLBaseDocument(BaseModel, Generic[T], ABC):
         collection = _database[cls.get_collection_name()]
 
         try:
-            instance = collection.find_one(filter.options)
+            instance = collection.find_one(filter_options)
             if instance:
                 return cls.from_mongo(instance)
             new_instance = cls(**filter_options)
