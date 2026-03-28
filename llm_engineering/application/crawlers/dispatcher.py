@@ -25,7 +25,7 @@ class CrawlerDispatcher:
         return self
 
     def register_linkedin(self) -> "CrawlerDispatcher":
-        self.register("https://linkedin.com", LinkedinCrawler)
+        self.register("https://linkedin.com", LinkedInCrawler)
         
         return self
 
@@ -38,7 +38,7 @@ class CrawlerDispatcher:
         parsed_domain = urlparse(domain)
         domain = parsed_domain.netloc
 
-        self.crawlers[r"https://(www\.){}/*".format(re.escape(domain))] = crawler
+        self._crawlers[r"https://(www\.){}/*".format(re.escape(domain))] = crawler
 
     def get_crawler(self, url: str) -> BaseCrawler:
         for pattern, crawler in self._crawlers.items():
