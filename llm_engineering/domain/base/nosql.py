@@ -79,10 +79,10 @@ class NoSQLBaseDocument(BaseModel, Generic[T], ABC):
     def bulk_insert(cls: Type[T], documents: list[T], **kwargs) -> bool:
         collection = _database[cls.get_collection_name()]
         try:
-            collection.insert_many([doc.tomongo(**kwargs) for doc in documents])
+            collection.insert_many([doc.to_mongo(**kwargs) for doc in documents])
             return True
 
-        except (errors.WriteError, errors.BulkWWWriteError):
+        except (errors.WriteError, errors.BulkWriteError):
             logger.exception(f"Failed to insert documents of type {cls.__name__}")
             return False
         
